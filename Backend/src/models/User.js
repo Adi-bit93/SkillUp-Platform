@@ -11,15 +11,18 @@ const userSchema = new mongoose.Schema({
         type: String,
         required: true,
         unique: true,
+        lowercase: true,
         trim: true
     },
     password: {
         type: String,
-        required: true
+        required: true,
+        minlength: [6, "Password must be at least 6 characters."],
+        select: false
     },
     role: {
         type: String, 
-        enum: ['student','teacher'],
+        enum: ['student','teacher', 'admin'],
         default: 'student'
     },
     points: {
@@ -27,9 +30,9 @@ const userSchema = new mongoose.Schema({
         default: 0
     },
     badges: [{
-        type: String
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Badge"
     }]
-
 
 }, { timestamps: true });
 
