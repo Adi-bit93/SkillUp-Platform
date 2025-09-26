@@ -1,17 +1,24 @@
+import ApiError from "../utils/ApiError";
+
 const notFound = (req, res, next) => {
-    const error = new Error(`Not Found - ${req.originalUrl}`);
-    res.status(404);
+    const error = new ApiError(404, `Not Found - ${req.originalUrl}`);
     next(error);
 }
 
 const errorHandler = (err, req, res, next) => {
-    const statusCode = res.statusCode === 200 ? 500 : res.statusCode;
-    res.status(statusCode);
-    res.json({
-        message: err.message,
-        stack: process.env.NODE_ENV === 'production' ? null : err.stack,
-    })
+    if(err instanceof ApiError) {
+        return res.status(err.statusCode).json({
+            success: err.success,
+            message:err.message,
+            errors: err.errors
+        });
+    }
 
+    return res.status(500).json({
+        success: false,
+        message: err.message || "Internal Server Error",
+        stack: process.env.NODE_ENV === 'production' ? null : err.stack,
+    });
 };
 
 export { notFound, errorHandler };
