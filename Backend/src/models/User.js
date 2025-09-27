@@ -1,5 +1,6 @@
 import mongoose from 'mongoose';
 import bcrypt from 'bcrypt';
+import Badge from './Badge.js';
 
 const userSchema = new mongoose.Schema({
     name: {

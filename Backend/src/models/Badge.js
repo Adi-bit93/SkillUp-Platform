@@ -14,6 +14,7 @@ const badgeSchema = new mongoose.Schema(
     },
     icon: {
       type: String, // store URL of badge image/icon
+      default: ""
     },
   },
   { timestamps: true }

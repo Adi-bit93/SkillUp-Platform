@@ -1,11 +1,12 @@
 import User from "../models/User.js";
+import Badge from '../models/Badge.js';
 import generateToken from "../utils/generateToken.js";
 import asyncHandler from '../utils/asyncHandler.js';
 import ApiError from "../utils/ApiError.js";
 import ApiResponse from "../utils/ApiResponse.js";
 
 const registerUser = asyncHandler(async (req, res, next) => {
-    const { name, email, password, role } = req.body;
+    const { name, email, password, role } = req?.body;
 
     if (!email || !role || !password) {
         throw new ApiError(401, "Mention field is required")
@@ -21,8 +22,6 @@ const registerUser = asyncHandler(async (req, res, next) => {
         email,
         password,
         role,
-        points,
-        badges
     })
 
     if (!user) {
@@ -50,7 +49,7 @@ const loginUser = asyncHandler(async (req, res, next) => {
         throw new ApiError(401, "Email and password are required")
     }
 
-    const user = await User.findOne({ email}).select('+paswword');
+    const user = await User.findOne({ email}).select('+password');
 
     if(!user){
         throw new ApiError(404, "User not found")
