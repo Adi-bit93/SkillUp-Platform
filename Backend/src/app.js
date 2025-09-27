@@ -19,12 +19,16 @@ app.use(cookieparser());
 import authRoutes from './routes/authRoutes.js';
 import badgeRoutes from './routes/badge.routes.js';
 import challengeRoutes from './routes/challenge.routes.js'
+import submissionRoutes from './routes/submission.routes.js'
+import leaderboardRoutes from './routes/leaderboard.routes.js'
 
 //routes declaration 
 
 app.use('/api/auth', authRoutes);
 app.use('/api/badges', badgeRoutes);
 app.use('/api/challenge', challengeRoutes)
+app.use('/api/submission', submissionRoutes)
+app.use('/api/leaderboard', leaderboardRoutes)
 
 
 export default app;

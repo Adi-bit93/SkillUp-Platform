@@ -1,3 +1,4 @@
+import mongoose from "mongoose";
 import Submission from "../models/Submission.js";
 import Challenge from "../models/Challenge.js";
 import User from "../models/User.js";
@@ -7,6 +8,10 @@ import asyncHandler from "../utils/asyncHandler.js";
 
 const createSubmission = asyncHandler(async (req, res, next) => {
     const { challengeId, proof } = req.body;
+
+    if (!mongoose.Types.ObjectId.isValid(challengeId)) {
+        throw new ApiError(400, "Invalid challenge ID format")
+    }
 
     const challenge = await Challenge.findById(challengeId);
 
@@ -67,7 +72,7 @@ const reviewSubmission = asyncHandler(async (req, res, next) => {
         )
 });
 
-export const getAllSubmissions = asyncHandler(async (req, res, next) => {
+const getAllSubmissions = asyncHandler(async (req, res, next) => {
     const submissions = await Submission.find()
         .populate("student", "name email")
         .populate("challenge", "title points");
