@@ -46,13 +46,15 @@ const getChallengesById = asyncHandler(async (req, res, next) => {
 })
 
 const getChallenges = asyncHandler(async (req, res, next) => {
-    const challenges = (await Challenge.find({isActive: true})).sort({createdAt: -1});
+    const challenges = await Challenge.find({ isActive: true }).sort({ createdAt: -1 });
+
     return res 
         .status(200)
         .json(
             new ApiResponse(200, challenges, "Challenges fetched Successfully")
         );
-})
+});
+
 
 const updateChallenge = asyncHandler(async (req, res, next) => {
     const { title, description, type, proofType, points, isActive} = req.body;
