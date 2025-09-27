@@ -18,11 +18,13 @@ app.use(cookieparser());
 //routes import
 import authRoutes from './routes/authRoutes.js';
 import badgeRoutes from './routes/badge.routes.js';
+import challengeRoutes from './routes/challenge.routes.js'
 
 //routes declaration 
 
 app.use('/api/auth', authRoutes);
 app.use('/api/badges', badgeRoutes);
+app.use('/api/challenge', challengeRoutes)
 
 
 export default app;
