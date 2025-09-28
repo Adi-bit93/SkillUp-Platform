@@ -8,6 +8,9 @@ import Profile from '../src/pages/Auth/Profile.jsx';
 import ProtectedRoute from './components/ProtectedRoute.jsx';
 import './App.css'
 import { AuthProvider } from './context/AuthContext.jsx';
+import Dashboard from './pages/Dashboard.jsx';
+import Challenges from './pages/Challenges.jsx';
+import Leaderboard from './pages/Leaderboard.jsx';
 
 function App() {
   const [count, setCount] = useState(0)
@@ -17,11 +20,16 @@ function App() {
      <Router>
       <Routes>
         <Route path="/" element={<Home />} />
-        <Route path="/login" element={<Login />} />
+        <Route path="/login" element={<Login />} />       
         <Route path="/register" element={<Register />} />
+        
         <Route element={<ProtectedRoute />}>
-          <Route path="/profile" element={<Profile />} />
+          <Route path="/dashboard/*" element={<Dashboard />} />
+          <Route path='/profile' element={<Profile/>}/>
+          <Route path='/challenge' element={<Challenges/>}/>
+          <Route path='/leaderboard' element={<Leaderboard/>}/>
         </Route>
+
       </Routes>
     </Router>
     </AuthProvider>

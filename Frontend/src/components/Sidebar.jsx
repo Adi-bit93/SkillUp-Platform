@@ -7,7 +7,7 @@ export default function Sidebar() {
   const location = useLocation();
 
   const navItems = [
-    { name: "Profile", path: "/dashboard/profile" },
+    // { name: "Profile", path: "/dashboard/profile" },
     { name: "Challenges", path: "/dashboard/challenges" },
     { name: "Leaderboard", path: "/dashboard/leaderboard" },
   ];

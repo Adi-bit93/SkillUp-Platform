@@ -44,15 +44,14 @@ export default function Register() {
             console.log("Registration successful:", data);
             
             // ✅ Fixed: Use the returned data properly
-            if (data.token || data.user) {
-                // If registration returns login data, log the user in
-                login(data);
-                navigate("/dashboard"); // or wherever you want to redirect after successful registration
-            } else {
-                // If registration just creates the account, redirect to login
-                navigate("/login");
-            }
+            login(data.data);
+            navigate("/login")
 
+            // The backend returns user data and a token on successful registration.
+            // Log the user in and redirect to the dashboard.
+            login(data.data);
+            navigate("/dashboard");
+            
         } catch (error) {
             console.error("Registration error details:", error);
             console.error("Error message:", error.message);
