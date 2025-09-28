@@ -6,7 +6,7 @@ import ApiError from "../utils/ApiError.js";
 import ApiResponse from "../utils/ApiResponse.js";
 
 const registerUser = asyncHandler(async (req, res, next) => {
-    const { name, email, password, role } = req?.body;
+    const { username, email, password, role } = req.body;
 
     if (!email || !role || !password) {
         throw new ApiError(401, "Mention field is required")
@@ -18,7 +18,7 @@ const registerUser = asyncHandler(async (req, res, next) => {
         throw new ApiError(404, "User already exists")
     }
     const user = await User.create({
-        name,
+        username,
         email,
         password,
         role,
@@ -32,7 +32,7 @@ const registerUser = asyncHandler(async (req, res, next) => {
         .json(
             new ApiResponse(201, {
                 _id: user._id,
-                name: user.name,
+                username: user.username,
                 email: user.email,
                 role: user.role,
                 points: user.points,
@@ -57,7 +57,17 @@ const loginUser = asyncHandler(async (req, res, next) => {
 
 
     const isMatch = await user.matchPassword(password);
-    if (!isMatch) {
+    if (!isMatch) {        throw new ApiError(401, "Invalid credentials");
+    }
+
+    // Check for initial badges for new users (e.g., "First Login" badge)
+    // This logic might be better placed in the registerUser function or a dedicated badge awarding service
+    // For demonstration, let's assume a "First Login" badge exists and is awarded here if not already
+    const firstLoginBadge = await Badge.findOne({ criteria: "First Login" });
+    if (firstLoginBadge && !user.badges.includes(firstLoginBadge._id)) {
+        user.badges.push(firstLoginBadge._id);
+        await user.save();
+    
         throw new ApiError(401, "Invalid credentials")
     }
 
@@ -66,7 +76,7 @@ const loginUser = asyncHandler(async (req, res, next) => {
         .json(
             new ApiResponse(200, {
                 _id: user._id,
-                name: user.name,
+                username: user.username,
                 email: user.email,
                 role: user.role,
                 points: user.points,
@@ -92,7 +102,7 @@ const getProfile = asyncHandler(async (req, res, next) => {
         .json(
             new ApiResponse(201, {
                 _id: user._id,
-                name: user.name,
+                username: user.username,
                 email:user.email,
                 role: user.role,
                 points: user.points,

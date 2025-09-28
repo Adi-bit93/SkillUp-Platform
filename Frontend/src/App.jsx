@@ -1,8 +1,8 @@
 import { useState } from 'react'
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Home from './pages/Home.jsx';
-import Login from './pages/Auth/Login.jsx';
-import Register from './pages/Auth/SignIn.jsx'
+import Login from '../src/pages/Auth/Login.jsx';
+import Register from '../src/pages/Auth/Register.jsx'
 
 import './App.css'
 import { AuthProvider } from './context/AuthContext.jsx';
