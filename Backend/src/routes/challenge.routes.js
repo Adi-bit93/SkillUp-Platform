@@ -11,7 +11,7 @@ import { protect } from "../middleware/authMiddleware.js"
 
 const router = express.Router();
 
-router.get("/getChallenges", getChallenges)
+router.get("/", getChallenges)
 router.get("/:id", getChallengesById);
 
 //Protected

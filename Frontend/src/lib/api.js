@@ -6,13 +6,13 @@ export async function apiRequest(
   body = null,
   token = null
 ) {
+  // ✅ Always pull token from localStorage as fallback
+  const authToken = token || localStorage.getItem("token");
+
   const headers = {
     "Content-Type": "application/json",
+    ...(authToken ? { Authorization: `Bearer ${authToken}` } : {}),
   };
-
-  if (token) {
-    headers["Authorization"] = `Bearer ${token}`;
-  }
 
   const config = {
     method,
@@ -35,24 +35,24 @@ export async function apiRequest(
       data = await res.text(); // fallback for non-JSON responses
     }
 
-    // ✅ Fixed: Check res.ok first, then throw with proper error message
     if (!res.ok) {
       let errorMessage;
-      
-      if (typeof data === 'object' && data.message) {
+
+      if (typeof data === "object" && data.message) {
         errorMessage = data.message;
-      } else if (typeof data === 'string') {
-        // ✅ Extract meaningful error from HTML responses
-        if (data.includes('MongoServerError: E11000 duplicate key error')) {
-          if (data.includes('username_1 dup key')) {
-            errorMessage = "Username already exists. Please choose a different username.";
-          } else if (data.includes('email_1 dup key')) {
-            errorMessage = "Email already exists. Please use a different email address.";
+      } else if (typeof data === "string") {
+        if (data.includes("MongoServerError: E11000 duplicate key error")) {
+          if (data.includes("username_1 dup key")) {
+            errorMessage =
+              "Username already exists. Please choose a different username.";
+          } else if (data.includes("email_1 dup key")) {
+            errorMessage =
+              "Email already exists. Please use a different email address.";
           } else {
-            errorMessage = "This account already exists. Please try different details.";
+            errorMessage =
+              "This account already exists. Please try different details.";
           }
-        } else if (data.includes('<html>') || data.includes('<!DOCTYPE')) {
-          // Generic HTML error page
+        } else if (data.includes("<html>") || data.includes("<!DOCTYPE")) {
           errorMessage = "Server error occurred. Please try again later.";
         } else {
           errorMessage = data;
@@ -60,13 +60,12 @@ export async function apiRequest(
       } else {
         errorMessage = `HTTP ${res.status}: ${res.statusText}`;
       }
-      
+
       throw new Error(errorMessage);
     }
 
     return data;
   } catch (err) {
-    // ✅ Re-throw the original error to preserve error details
     throw err;
   }
 }

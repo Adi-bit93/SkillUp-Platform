@@ -1,48 +1,34 @@
-import { Link, useLocation } from "react-router-dom";
-import { useContext } from "react";
-import { AuthContext } from "../context/AuthContext";
-
-export default function Sidebar() {
-  const { logout } = useContext(AuthContext);
-  const location = useLocation();
-
+export default function Sidebar({ activeTab, setActiveTab }) {
   const navItems = [
-    // { name: "Profile", path: "/dashboard/profile" },
-    { name: "Challenges", path: "/dashboard/challenges" },
-    { name: "Leaderboard", path: "/dashboard/leaderboard" },
+    { name: "Overview", key: "overview" },
+    { name: "Eco-Tasks", key: "tasks" },
+    { name: "Leaderboard", key: "leaderboard" },
   ];
 
   return (
-    <aside className="bg-green-700 text-white w-64 h-screen hidden md:flex flex-col">
-      <div className="p-5 text-2xl font-bold border-b border-green-600">
-        🌍 EcoPlatform
-      </div>
-      <nav className="flex-1 p-4">
-        <ul className="space-y-3">
+    <aside className="bg-white border-r w-64 h-screen sticky top-0 p-5 hidden md:flex flex-col">
+      <div className="text-2xl font-bold text-green-700 mb-8">🌱 EcoLearn</div>
+
+      <nav className="flex-1">
+        <ul className="space-y-2">
           {navItems.map((item) => (
-            <li key={item.path}>
-              <Link
-                to={item.path}
-                className={`block px-4 py-2 rounded-md ${
-                  location.pathname === item.path
-                    ? "bg-green-500 font-semibold"
-                    : "hover:bg-green-600"
+            <li key={item.key}>
+              <button
+                onClick={() => setActiveTab(item.key)}
+                className={`w-full flex items-center px-4 py-2 rounded-md transition text-left ${
+                  activeTab === item.key
+                    ? "bg-green-100 text-green-700 font-semibold"
+                    : "text-gray-700 hover:bg-green-50"
                 }`}
               >
                 {item.name}
-              </Link>
+              </button>
             </li>
           ))}
         </ul>
       </nav>
-      <div className="p-4 border-t border-green-600">
-        <button
-          onClick={logout}
-          className="w-full bg-red-500 py-2 rounded-md hover:bg-red-600"
-        >
-          Logout
-        </button>
-      </div>
+
+      <div className="mt-auto border-t pt-4 text-sm text-gray-600">Student</div>
     </aside>
   );
 }

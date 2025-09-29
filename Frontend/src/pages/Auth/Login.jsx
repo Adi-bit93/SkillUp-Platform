@@ -18,7 +18,7 @@ export default function Login() {
 
         try {
             const data = await apiRequest("/auth/login", "POST", { email, password });
-            login(data.data)
+            login(data.data); // user + token gets stored
             navigate("/dashboard");
         } catch (err) {
             setError(err.message);

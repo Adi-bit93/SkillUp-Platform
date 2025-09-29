@@ -8,7 +8,7 @@ const getGlobalLeaderboard = asyncHandler(async (req, res, next) => {
     const topStudents = await User.find({ role: "student" })
         .sort({ points: -1}) // highest first
         .limit(20) //Top 20 
-        .select("name email points badges"); // select only necessary fields
+        .select("username email points badges"); // select only necessary fields
 
         return res
             .status(200)

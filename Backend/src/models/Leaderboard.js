@@ -12,7 +12,7 @@ const leaderboardSchema = new mongoose.Schema(
     },
     points: { 
         type: Number,
-        default: 0
+        default: 10
      },
     rank: { type: Number }, // can be recalculated daily
   },
