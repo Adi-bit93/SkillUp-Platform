@@ -49,8 +49,8 @@ export default function Register() {
 
             // The backend returns user data and a token on successful registration.
             // Log the user in and redirect to the dashboard.
-            login(data.data);
-            navigate("/dashboard");
+            // login(data.data);
+            // navigate("/dashboard");
             
         } catch (error) {
             console.error("Registration error details:", error);

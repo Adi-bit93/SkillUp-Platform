@@ -4,38 +4,40 @@ export const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
-  const [token, setToken] = useState(null);
-  const [loading, setLoading] = useState(true); // NEW
+  const [loading, setLoading] = useState(true); // Used to delay route checks until restored
 
   useEffect(() => {
+    // Restore user from localStorage
     const storedUser = localStorage.getItem("user");
-    const storedToken = localStorage.getItem("token");
-
-    if (storedUser && storedToken) {
-      setUser(JSON.parse(storedUser));
-      setToken(storedToken);
+    if (storedUser) {
+      try {
+        const parsed = JSON.parse(storedUser);
+        setUser(parsed);
+      } catch {
+        localStorage.removeItem("user"); // corrupt data reset
+      }
     }
-    setLoading(false); // Done restoring
+    setLoading(false);
   }, []);
 
+  // Login -> save user with token + role
   const login = (userData) => {
-    if (userData.token) {
-      localStorage.setItem("token", userData.token);
-      setToken(userData.token);
-    }
+    // Ensure role exists
+    if (!userData.role) userData.role = "student";
+
+    // Save whole user including token
     localStorage.setItem("user", JSON.stringify(userData));
     setUser(userData);
   };
 
+  // Logout -> clear everything
   const logout = () => {
     localStorage.removeItem("user");
-    localStorage.removeItem("token");
     setUser(null);
-    setToken(null);
   };
 
   return (
-    <AuthContext.Provider value={{ user, token, login, logout, loading }}>
+    <AuthContext.Provider value={{ user, login, logout, loading }}>
       {children}
     </AuthContext.Provider>
   );
